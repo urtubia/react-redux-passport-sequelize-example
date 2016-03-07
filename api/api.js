@@ -7,6 +7,7 @@ import {mapUrl} from 'utils/url.js';
 import PrettyError from 'pretty-error';
 import http from 'http';
 import SocketIo from 'socket.io';
+import { createSequelize, User } from './models/index';
 
 const pretty = new PrettyError();
 const app = express();
@@ -17,13 +18,14 @@ const io = new SocketIo(server);
 io.path('/ws');
 
 app.use(session({
-  secret: 'react and redux rule!!!!',
+  secret: 'react and redux rule a lot!!##$$',
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: 60000 }
 }));
 app.use(bodyParser.json());
 
+app.locals.sequelize = createSequelize();
 
 app.use((req, res) => {
   const splittedUrlPath = req.url.split('?')[0].split('/').slice(1);
@@ -65,6 +67,10 @@ if (config.apiPort) {
     console.info('==> 💻  Send requests to http://%s:%s', config.apiHost, config.apiPort);
   });
 
+  /* 
+   *
+   * HU: Disabling socket.io server for now
+   *
   io.on('connection', (socket) => {
     socket.emit('news', {msg: `'Hello World!' from server`});
 
@@ -86,6 +92,8 @@ if (config.apiPort) {
     });
   });
   io.listen(runnable);
+  */
+
 } else {
   console.error('==>     ERROR: No PORT environment variable has been specified');
 }
