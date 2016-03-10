@@ -1,6 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import config from '../src/config';
 import * as actions from './actions/index';
 import {mapUrl} from 'utils/url.js';
@@ -8,24 +9,35 @@ import PrettyError from 'pretty-error';
 import http from 'http';
 import SocketIo from 'socket.io';
 import { createSequelize, User } from './models/index';
+import passport from 'passport';
+import morgan from 'morgan';
+import connectSessionSequelize from 'connect-session-sequelize';
+import configPassport from './utils/passportConfig';
+
+var SequelizeStore = connectSessionSequelize(session.Store);
 
 const pretty = new PrettyError();
 const app = express();
 
 const server = new http.Server(app);
 
-const io = new SocketIo(server);
-io.path('/ws');
+//const io = new SocketIo(server);
+//io.path('/ws');
+
+app.locals.sequelize = createSequelize();
 
 app.use(session({
-  secret: 'react and redux rule a lot!!##$$',
+  secret: '!!##$$ASDFASDFDFGHCVBNRTYU',
+  store: new SequelizeStore({ db: app.locals.sequelize }),
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: 60000 }
 }));
 app.use(bodyParser.json());
-
-app.locals.sequelize = createSequelize();
+app.use(morgan('dev'));
+app.use(passport.initialize());
+app.use(passport.session());
+configPassport(passport);
 
 app.use((req, res) => {
   const splittedUrlPath = req.url.split('?')[0].split('/').slice(1);

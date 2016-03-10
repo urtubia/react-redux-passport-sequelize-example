@@ -30,6 +30,17 @@ function initializeModels(sequelize) {
        unique: true,
      },
      password: Sequelize.STRING,
+   },{
+     classMethods: {
+       generateHash: password => {
+         bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+       }
+     },
+     instanceMethods: {
+       validPassword: password => {
+         return bcrypt.compareSync(password, this.password);
+       }
+     }
    }); 
 
    Tracker = sequelize.define('tracker', {
