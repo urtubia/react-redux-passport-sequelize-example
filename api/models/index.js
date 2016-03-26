@@ -1,6 +1,8 @@
 import Sequelize from 'sequelize';
+import bcrypt from 'bcrypt-nodejs';
 
 export function createSequelize() { 
+
   var sequelize = new Sequelize('database', 'username', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
@@ -18,10 +20,6 @@ export function createSequelize() {
   initializeModels(sequelize);
   return sequelize;
 }
-
-export var User = null;
-export var Measurement = null;
-export var Tracker = null;
 
 function initializeModels(sequelize) {
    User = sequelize.define('user', {
@@ -43,21 +41,10 @@ function initializeModels(sequelize) {
      }
    }); 
 
-   Tracker = sequelize.define('tracker', {
-     name: Sequelize.STRING
-   });
-
-   User.hasMany(Tracker);
-   Tracker.belongsTo(User);
-
-   Measurement = sequelize.define('measurement', {
-     booleanValue: Sequelize.BOOLEAN,
-     numericValue: Sequelize.DOUBLE
-   });
-
-   Tracker.hasMany(Measurement);
-   Measurement.belongsTo(Tracker);
-
-   sequelize.sync();
+   if(process.env.TEST_DATABASE){
+     sequelize.sync({force: true});
+   }else{
+     sequelize.sync();
+   }
 }
 
