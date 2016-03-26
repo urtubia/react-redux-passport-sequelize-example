@@ -13,6 +13,7 @@ import passport from 'passport';
 import morgan from 'morgan';
 import connectSessionSequelize from 'connect-session-sequelize';
 import configPassport from './utils/passportConfig';
+import passportRoutes from './utils/passportRoutes';
 
 var SequelizeStore = connectSessionSequelize(session.Store);
 
@@ -38,7 +39,9 @@ app.use(morgan('dev'));
 app.use(passport.initialize());
 app.use(passport.session());
 configPassport(passport);
+passportRoutes(app, passport);
 
+/*
 app.use((req, res) => {
   const splittedUrlPath = req.url.split('?')[0].split('/').slice(1);
 
@@ -64,7 +67,7 @@ app.use((req, res) => {
     res.status(404).end('NOT FOUND');
   }
 });
-
+*/
 
 const bufferSize = 100;
 const messageBuffer = new Array(bufferSize);
