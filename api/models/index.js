@@ -21,6 +21,8 @@ export function createSequelize() {
   return sequelize;
 }
 
+export var User = null;
+
 function initializeModels(sequelize) {
    User = sequelize.define('user', {
      email: {
@@ -31,11 +33,11 @@ function initializeModels(sequelize) {
    },{
      classMethods: {
        generateHash: password => {
-         bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
        }
      },
      instanceMethods: {
-       validPassword: password => {
+       validPassword: function(password) {
          return bcrypt.compareSync(password, this.password);
        }
      }
