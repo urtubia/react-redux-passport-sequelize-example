@@ -122,7 +122,6 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "piping": "^0.3.0",
-    "pretty-error": "^1.2.0",
     "react": "^0.14.2",
     "react-bootstrap": "^0.28.1",
     "react-dom": "^0.14.1",
