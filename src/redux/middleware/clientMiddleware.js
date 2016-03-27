@@ -1,3 +1,8 @@
+// This middleware has a little magic glitter. It takes actions of type
+// { types: [REQUEST, SUCCESS, FAILURE], promise: (client) => client.restaction('/endpoint') }
+//
+// It depends on `client.restaction` returning a promise (but the element `promise` of the action is not a promise unfortunately.
+
 export default function clientMiddleware(client) {
   return ({dispatch, getState}) => {
     return next => action => {
