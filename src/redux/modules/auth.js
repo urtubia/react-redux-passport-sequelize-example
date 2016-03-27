@@ -7,6 +7,9 @@ const LOGIN_FAIL = 'redux-example/auth/LOGIN_FAIL';
 const LOGOUT = 'redux-example/auth/LOGOUT';
 const LOGOUT_SUCCESS = 'redux-example/auth/LOGOUT_SUCCESS';
 const LOGOUT_FAIL = 'redux-example/auth/LOGOUT_FAIL';
+const SIGNUP = 'redux-example/auth/SIGNUP';
+const SIGNUP_SUCCESS = 'redux-example/auth/SIGNUP_SUCCESS';
+const SIGNUP_FAIL = 'redux-example/auth/SIGNUP_FAIL';
 
 const initialState = {
   loaded: false
@@ -24,7 +27,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: true,
-        user: action.result
+        user: action.result.user
       };
     case LOAD_FAIL:
       return {
@@ -42,7 +45,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         loggingIn: false,
-        user: action.result
+        user: action.result.user
       };
     case LOGIN_FAIL:
       return {
@@ -50,6 +53,24 @@ export default function reducer(state = initialState, action = {}) {
         loggingIn: false,
         user: null,
         loginError: action.error
+      };
+    case SIGNUP:
+      return {
+        ...state,
+        signingUp: true,
+      };
+    case SIGNUP_SUCCESS:
+      return {
+        ...state,
+        signingUp: false,
+        user: action.result.user
+      };
+    case SIGNUP_FAIL:
+      return {
+        ...state,
+        signingUp: false,
+        user: null,
+        signupError: action.error
       };
     case LOGOUT:
       return {
@@ -80,16 +101,29 @@ export function isLoaded(globalState) {
 export function load() {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get('/loadAuth')
+    promise: (client) => client.get('/me')
   };
 }
 
-export function login(name) {
+export function login(email, password) {
   return {
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
     promise: (client) => client.post('/login', {
       data: {
-        name: name
+        email: email,
+        password: password
+      }
+    })
+  };
+}
+
+export function signup(email, password) {
+  return {
+    types: [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL],
+    promise: (client) => client.post('/signup', {
+      data: {
+        email: email,
+        password: password
       }
     })
   };
