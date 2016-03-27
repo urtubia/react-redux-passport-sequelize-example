@@ -15,9 +15,9 @@ export default class Login extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const input = this.refs.username;
-    this.props.login(input.value);
-    input.value = '';
+    this.props.login(this.refs.email.value, this.refs.password.value);
+    this.refs.email.value = '';
+    this.refs.password.value = '';
   }
 
   render() {
@@ -31,17 +31,17 @@ export default class Login extends Component {
         <div>
           <form className="login-form form-inline" onSubmit={this.handleSubmit}>
             <div className="form-group">
-              <input type="text" ref="username" placeholder="Enter a username" className="form-control"/>
-            </div>
+              <input type="text" ref="email" placeholder="email" className="form-control"/><br/>
+              <input type="password" ref="password" placeholder="password" className="form-control"/><br/>
             <button className="btn btn-success" onClick={this.handleSubmit}><i className="fa fa-sign-in"/>{' '}Log In
             </button>
+            </div>
           </form>
-          <p>This will "log you in" as this user, storing the username in the session of the API server.</p>
         </div>
         }
         {user &&
         <div>
-          <p>You are currently logged in as {user.name}.</p>
+          <p>You are currently logged in as {user.email}.</p>
 
           <div>
             <button className="btn btn-danger" onClick={logout}><i className="fa fa-sign-out"/>{' '}Log Out</button>
