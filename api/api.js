@@ -28,10 +28,10 @@ const server = new http.Server(app);
 app.locals.sequelize = createSequelize();
 
 app.use(session({
-  secret: '!!##$$ASDFASDFDFGHCVBNRTYU',
+  secret: 'somesecret',
   store: new SequelizeStore({ db: app.locals.sequelize }),
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: { maxAge: 60000 }
 }));
 app.use(bodyParser.json());
