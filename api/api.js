@@ -3,8 +3,6 @@ import session from 'express-session';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import config from '../src/config';
-import {mapUrl} from 'utils/url.js';
-import PrettyError from 'pretty-error';
 import http from 'http';
 import SocketIo from 'socket.io';
 import { createSequelize, User } from './models/index';
@@ -16,7 +14,6 @@ import passportRoutes from './utils/passportRoutes';
 
 var SequelizeStore = connectSessionSequelize(session.Store);
 
-const pretty = new PrettyError();
 const app = express();
 
 const server = new http.Server(app);
@@ -30,7 +27,7 @@ app.use(session({
   secret: 'somesecret',
   store: new SequelizeStore({ db: app.locals.sequelize }),
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: { maxAge: 60000 }
 }));
 app.use(bodyParser.json());
