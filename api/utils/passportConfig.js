@@ -6,13 +6,16 @@ var LocalStrategy = passportLocal.Strategy;
 export default function configPassport(passport) {
   passport.serializeUser( (user, done) => {
     done(null, user.id);
+    return null;
   });
 
   passport.deserializeUser( (id, done) => {
     User.findOne({ where: {id: id} }).then( (user) => {
       done(null, user);
+      return null;
     }).catch((err) => {
       done(err, user);
+      return null;
     });
   });
 
@@ -30,9 +33,11 @@ export default function configPassport(passport) {
         }
       }).then(newUser => {
           done(null, newUser);
+          return null;
       }).catch(err => {
         console.log(`Err ${err}`); 
         done(err);
+        return null;
       });
 
     })}));
@@ -40,16 +45,20 @@ export default function configPassport(passport) {
   passport.use('local-login', new LocalStrategy({usernameField:'email', passwordField:'password', passReqToCallback: true}, (req, email, password, done) => {
     User.findOne({where: {email: email}}).then(user => {
       if(!user){
-        return done(null, false);
+        done(null, false);
+        return null;
       }
 
       if(!user.validPassword(password)){
-        return done(null, false);
+        done(null, false);
+        return null;
       }
 
       done(null, user);
+      return null;
     }).catch(err => {
       done(err);
+      return null;
     });
 
   }));
