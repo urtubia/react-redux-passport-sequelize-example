@@ -7,7 +7,7 @@ import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Helmet from 'react-helmet';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
-import { routeActions } from 'react-router-redux';
+import { push } from 'react-router-redux';
 import config from '../../config';
 import { asyncConnect } from 'redux-async-connect';
 
@@ -25,7 +25,7 @@ import { asyncConnect } from 'redux-async-connect';
 
 @connect(
   state => ({user: state.auth.user}),
-  {logout, pushState: routeActions.push})
+  {logout, pushState: push})
 
 export default class App extends Component {
   static propTypes = {
